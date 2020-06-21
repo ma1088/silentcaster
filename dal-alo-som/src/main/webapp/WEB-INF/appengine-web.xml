@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
+
+  <threadsafe>true</threadsafe>
+  <sessions-enabled>false</sessions-enabled>
+  <runtime>java8</runtime>
+
+  <system-properties>
+    <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
+  </system-properties>
+
+  <env-variables>
+    <env-var name="CLOUD_SQL_CONNECTION_NAME" value="silentcaster02:southamerica-east1:silentcasterdb" />
+    <env-var name="DB_USER" value="alosom" />
+    <env-var name="DB_PASS" value="s0m" />
+    <env-var name="DB_NAME" value="alosom" />
+  </env-variables>
+
+  <service>alosom-service</service>
+  
+  <basic-scaling>
+    <max-instances>5</max-instances>
+    <idle-timeout>10m</idle-timeout>
+  </basic-scaling>
+
+</appengine-web-app>
