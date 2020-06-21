@@ -1,7 +1,7 @@
 dispatch:
   - url: "*/favicon.ico"
     service: default
-  - url: "https://silentcaster02.rj.r.appspot.com"
+  - url: "silentcaster02.rj.r.appspot.com"
     service: default
   - url: "*/alosom/*"
     service: alosom-service
