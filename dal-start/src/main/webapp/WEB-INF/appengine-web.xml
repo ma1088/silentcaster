@@ -19,7 +19,7 @@
   <service>iotstart-service</service>
   
   <basic-scaling>
-    <max-instances>100</max-instances>
+    <max-instances>25</max-instances>
     <idle-timeout>1m</idle-timeout>
   </basic-scaling>
 

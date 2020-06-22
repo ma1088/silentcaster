@@ -20,7 +20,7 @@
   <service>som-service</service>
   
   <basic-scaling>
-    <max-instances>200</max-instances>
+    <max-instances>25</max-instances>
     <idle-timeout>1m</idle-timeout>
   </basic-scaling>
 
