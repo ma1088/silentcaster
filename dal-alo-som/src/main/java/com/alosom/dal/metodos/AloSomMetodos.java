@@ -46,12 +46,12 @@ public class AloSomMetodos {
 				String unidade = rs.getString("unidade");
 				itens.add(new SomModel(dtRegistro, dtServidor, intensidade, area, andar, unidade));
 			}
+			cn.close();
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 			System.out.println(sql);
 			
 		}
-		
 		return itens;
 	}
 	
@@ -73,6 +73,7 @@ public class AloSomMetodos {
 			while (rs.next()) {
 				cdms.add(new CondModel(rs.getInt("ID_CONDOMINIO"), rs.getString("NOME")));
 			}
+			cn.close();
 			
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -97,6 +98,7 @@ public class AloSomMetodos {
 			while (rs.next()) {
 				ct = rs.getInt("CT");
 			}
+			cn.close();
 			
 		} catch(SQLException e) {
 			e.printStackTrace();

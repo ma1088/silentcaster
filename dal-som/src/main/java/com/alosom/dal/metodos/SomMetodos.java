@@ -21,6 +21,7 @@ public class SomMetodos {
 		ps.setInt(2, sm.getIntensidade());
 		ps.setDate(3, Date.valueOf(sm.getDtRegistro().toLocalDate()));
 		ps.execute();
+		cn.close();
 	}
 	
 }

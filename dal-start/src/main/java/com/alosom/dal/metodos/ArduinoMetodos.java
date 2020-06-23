@@ -22,6 +22,8 @@ public class ArduinoMetodos {
 			while (rs.next()) {
 				r = rs.getInt("ID");
 			}
+			cn.close();
+			
 			if (r < 0) {
 				return codigo;
 			}else {
