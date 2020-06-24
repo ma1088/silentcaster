@@ -1,15 +1,20 @@
 package com.alosom.ctl;
 
-import java.io.Serializable;
+import java.io.IOException;
 
-public final class IndexBean implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+import javax.faces.bean.ManagedBean;
+
+import com.google.appengine.repackaged.com.google.gson.JsonElement;
+import com.google.appengine.repackaged.com.google.gson.JsonObject;
+
+@ManagedBean
+public final class IndexBean {
 	
+	public static final String USER_KEY = "usuario";
+
 	private String loginMsg;
 	private String usuario;
+	private String senha;
 	private String mensagem;
 
 	
@@ -21,6 +26,14 @@ public final class IndexBean implements Serializable {
 		this.usuario = usuario;
 	}
 
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+	
 	public String getMensagem() {
 		return mensagem;
 	}
@@ -37,4 +50,21 @@ public final class IndexBean implements Serializable {
 		this.loginMsg = loginMsg;
 	}
 	
+	
+	public void apiCall() {
+		JsonObject jo = null;
+		try {
+			jo = ApiCall.login(usuario, senha);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		IndexBean bean = new IndexBean();
+		JsonElement je = jo.get("erro");
+		bean.setLoginMsg(je.getAsString());
+		
+	}
+	
+
 }

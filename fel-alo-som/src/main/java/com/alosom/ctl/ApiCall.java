@@ -19,8 +19,6 @@ public final class ApiCall {
 		HttpURLConnection conn = callApi(url, param);
 		
 		int resp = conn.getResponseCode();
-		System.out.println("HTTP Response Code: " + resp);
-		System.out.println("HTTP Response: " + conn.getResponseMessage());
 		
 		JsonObject jo;
 		if (resp == HttpURLConnection.HTTP_OK) {

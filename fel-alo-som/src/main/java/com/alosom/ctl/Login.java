@@ -7,9 +7,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -49,60 +52,42 @@ public class Login extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HashMap<String, String> params = new HashMap<String, String>();
 		String usuario = request.getParameter("usuario");
 		String senha = request.getParameter("senha");
-		String url = "https://alosom-service-dot-silentcaster02.rj.r.appspot.com/alosom/login";
-		
-		String param = "usuario=" + usuario + "&senha=" + senha;
-		byte[] postdata = param.getBytes();
-		
-		URL obj = new URL(url);
-		HttpURLConnection conn = (HttpURLConnection) obj.openConnection();
-		
-		conn.setRequestMethod("POST");
-		conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-		conn.setRequestProperty("charset", "utf-8");
-		conn.setRequestProperty("Content-Length", Integer.toString(postdata.length));
-		conn.setUseCaches(false);
-		
-		conn.setDoOutput(true);
-		try(DataOutputStream dt = new DataOutputStream(conn.getOutputStream())){
-			dt.write(postdata);
-			dt.flush();
-			dt.close();
+		if (usuario == null || usuario.isEmpty()) {
+			params.put(LoginBean.LOGIN_MSG_KEY, "Preencha o campo usuário.");
+			forwardWithParameter(request, response, "/", params);
+			return;
 		}
-		
-		int resp = conn.getResponseCode();
-		System.out.println("HTTP Response Code: " + resp);
-		System.out.println("HTTP Response: " + conn.getResponseMessage());
-		
-		JsonObject jo;
-		if (resp == HttpURLConnection.HTTP_OK) {
-			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			String inputln;
-			StringBuffer strbfr = new StringBuffer();
-			while ((inputln = br.readLine()) != null) {
-				strbfr.append(inputln);
-			}
-			br.close();
-			jo = new Gson().fromJson(strbfr.toString(), JsonObject.class);
-		} else {
-			jo = new JsonObject();
-			jo.addProperty("httperr", resp);
-			jo.addProperty("erro", conn.getResponseMessage());
+
+		JsonObject jo = ApiCall.login(usuario, senha);
+
+		if(jo.has("erro")) {
+			JsonElement je = jo.get("erro"); 
+			params.put(LoginBean.LOGIN_MSG_KEY, "Ops! " + je.getAsString());
+			forwardWithParameter(request, response, "/", params);
+		}else {
+			params.put(IndexBean.USER_KEY, usuario);
+			forwardWithParameter(request, response, "/index.jsp", params);
 		}
-		
-		IndexBean bean = (IndexBean) request.getAttribute("BeanId");
-		preencheBean(jo, bean);
-		
-		
-		
-		
-		response.sendRedirect(request.getRequestURI());
 	}
 
-	private void preencheBean(JsonObject jo, IndexBean bean) {
-		JsonElement je = jo.get("erro");
-		bean.setMensagem(je.getAsString());
+	private void forwardWithParameter(HttpServletRequest request, HttpServletResponse response, String url, HashMap<String, String> params) throws ServletException, IOException {
+		Iterator<Entry<String, String>> iterator = params.entrySet().iterator();
+		while (iterator.hasNext()) {
+			Map.Entry<String, String> attr = iterator.next();
+			request.setAttribute(attr.getKey(), attr.getValue());
+		}
+		RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
+		try {
+			rd.forward(request, response);
+		}catch(Exception e) {
+			e.printStackTrace();
+
+			rd = getServletContext().getRequestDispatcher("/");
+			request.setAttribute(LoginBean.LOGIN_MSG_KEY, "Algo deu errado...");
+			rd.forward(request, response);
+		}
 	}
 }
