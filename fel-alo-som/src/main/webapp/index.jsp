@@ -130,8 +130,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         	<%
         		ArrayList<RelatorioSom> al = bean.getRelatorioSom();
         		if (al != null){
-        			Iterator<RelatorioSom> it = al.iterator();
-        			
+        			Iterator<RelatorioSom> it = al.iterator();	
         			while (it.hasNext()){
         				out.println("<tr>");
         				RelatorioSom rs  = it.next();

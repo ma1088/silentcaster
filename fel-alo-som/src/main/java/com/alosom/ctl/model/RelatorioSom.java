@@ -10,6 +10,7 @@ public class RelatorioSom {
 	private String unidade;
 	private String intensidade;
 	private String data;
+	private String erro;
 	public String getArea() {
 		return area;
 	}
@@ -44,5 +45,11 @@ public class RelatorioSom {
 		Instant instant = Instant.ofEpochSecond(Long.parseLong(data));
 		LocalDateTime ldt = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
 		return ldt.getDayOfMonth() + "/" + ldt.getMonthValue() + "/" + ldt.getYear() + " " + ldt.getHour() + ":" + ldt.getMinute() + ":" + ldt.getSecond();
+	}
+	public String getErro() {
+		return erro;
+	}
+	public void setErro(String erro) {
+		this.erro = erro;
 	}
 }
