@@ -20,10 +20,12 @@ public final class IndexBean {
 	private String mensagem;
 	public static final String QUERY_JSON_KEY = "resultado_consulta";
 	private String resultado;
+	public static final String QUERY_CONDO_KEY = "condominio_consulta";
+	private int selectedCondo;
+	public static final String QUERY_SECONDS_EPOCH = "sec_epoch";
+	private int sec_epoch;
 	
 	private ArrayList<Condo> condos;
-
-	private int selectedCondo;
 	
 	public String getUsuario() {
 		return usuario;
@@ -60,6 +62,10 @@ public final class IndexBean {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void consulta() {
+		
+	}
 
 	public int getSelectedCondo() {
 		return selectedCondo;
@@ -83,6 +89,14 @@ public final class IndexBean {
 
 	public void setResultado(String resultado) {
 		this.resultado = resultado;
+	}
+
+	public int getSec_epoch() {
+		return sec_epoch;
+	}
+
+	public void setSec_epoch(int sec_epoch) {
+		this.sec_epoch = sec_epoch;
 	}
 
 }

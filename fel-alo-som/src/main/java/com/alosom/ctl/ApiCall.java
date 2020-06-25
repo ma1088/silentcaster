@@ -16,56 +16,26 @@ public final class ApiCall {
 		String url = "https://alosom-service-dot-silentcaster02.rj.r.appspot.com/alosom/login";		
 		String param = "usuario=" + usuario + "&senha=" + senha;
 
-		HttpURLConnection conn = callApi(url,"POST", param);
+		return callApi(url,"POST", param);
 		
-		int resp = conn.getResponseCode();
 		
-		JsonObject jo;
-		if (resp == HttpURLConnection.HTTP_OK) {
-			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			String inputln;
-			StringBuffer strbfr = new StringBuffer();
-			while ((inputln = br.readLine()) != null) {
-				strbfr.append(inputln);
-			}
-			br.close();
-			jo = new Gson().fromJson(strbfr.toString(), JsonObject.class);
-		} else {
-			jo = new JsonObject();
-			jo.addProperty("httperr", resp);
-			jo.addProperty("erro", conn.getResponseMessage());
-		}
-
-		return jo;
 	}
 
 	public static JsonObject buscaCondos(String usuario) throws IOException {
 		String url = "https://alosom-service-dot-silentcaster02.rj.r.appspot.com/alosom/buscacondo/" + usuario;
 		
-		HttpURLConnection conn = callApi(url, "GET", null);
-		int resp = conn.getResponseCode();
+		return  callApi(url, "GET", null);
 		
-		JsonObject jo;
-		if (resp == HttpURLConnection.HTTP_OK) {
-			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			String inputln;
-			StringBuffer strbfr = new StringBuffer();
-			while ((inputln = br.readLine()) != null) {
-				strbfr.append(inputln);
-			}
-			br.close();
-			jo = new Gson().fromJson(strbfr.toString(), JsonObject.class);
-		} else {
-			jo = new JsonObject();
-			jo.addProperty("httperr", resp);
-			jo.addProperty("erro", conn.getResponseMessage());
-		}
-
-		return jo;
 		
 	}
 	
-	private static HttpURLConnection callApi(String url, String method, String param) throws IOException {
+	public static JsonObject consultaRuidos(String condo, String sec_epoch) throws IOException {
+		String url = "https://alosom-service-dot-silentcaster02.rj.r.appspot.com/alosom/consulta/" + sec_epoch + "/" + condo;
+		return callApi(url, "GET", null);
+		
+	}
+	
+	private static JsonObject callApi(String url, String method, String param) throws IOException {
 		URL obj = new URL(url);
 		HttpURLConnection conn = (HttpURLConnection) obj.openConnection();
 		
@@ -83,6 +53,24 @@ public final class ApiCall {
 				dt.close();
 			}
 		}
-		return conn;
+		int resp = conn.getResponseCode();
+		
+		JsonObject jo;
+		if (resp == HttpURLConnection.HTTP_OK) {
+			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String inputln;
+			StringBuffer strbfr = new StringBuffer();
+			while ((inputln = br.readLine()) != null) {
+				strbfr.append(inputln);
+			}
+			br.close();
+			jo = new Gson().fromJson(strbfr.toString(), JsonObject.class);
+		} else {
+			jo = new JsonObject();
+			jo.addProperty("httperr", resp);
+			jo.addProperty("erro", conn.getResponseMessage());
+		}
+
+		return jo;
 	}
 }

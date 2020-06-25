@@ -26,17 +26,19 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
 <!-- init -->
 <%
-	Object s = request.getAttribute(IndexBean.USER_KEY); 
-	if ( s == null){
+	Object user = request.getAttribute(IndexBean.USER_KEY); 
+	Object qtitle = request.getAttribute(IndexBean.QUERY_TITLE_KEY);
+	if ( user == null ){ //problema!!
 		bean.setUsuario("ainda não fomos apresentados");
 	}else {
-		bean.setUsuario(s.toString());
-		bean.buscaCondos();
-	}
-	
-	s = request.getAttribute(IndexBean.QUERY_TITLE_KEY);
-	if (s != null){
-		bean.setMensagem(s.toString());
+		bean.setUsuario(user.toString());
+		if (qtitle == null){ //veio do login
+			bean.buscaCondos();
+		} else { //veio da consulta
+			bean.setMensagem(qtitle.toString());
+			bean.setResultado(request.getAttribute(IndexBean.QUERY_JSON_KEY).toString());
+			bean.setSelectedCondo(Integer.parseInt(request.getAttribute(IndexBean.QUERY_CONDO_KEY).toString()));
+		}
 	}
 %>
 
@@ -67,13 +69,17 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   </div>
   <div class="w3-bar-block">
   	<i class="fa fa-building"></i>
-	<select name="condos" id="cdlist" class="w3-bar-item w3-button w3-padding" >
+	<select name="condo" id="condo" class="w3-select" >
 	    <%
 	    	if (bean.getCondos() != null && bean.getCondos().size() > 0){
 		    	ArrayList<Condo> al = bean.getCondos();
 		    	for (int i = 0; i < al.size(); i++){
+		    		String isSelected = "";
+		    		if (al.get(i).getId() == bean.getSelectedCondo()){
+		    			isSelected = " selected=\"selected\"";
+		    		}
 		    		Condo cd = al.get(i);
-		    		out.println("<option value=\"" + cd.getId() + "\"><i class=\"fa fa-building fa-fw\"></i>" + cd.getNome() + " </option>");
+		    		out.println("<option value=\"" + cd.getId() + "\"" + isSelected + ">" + cd.getNome() + " </option>");
 		    	}
 	    	}
 	    %>
