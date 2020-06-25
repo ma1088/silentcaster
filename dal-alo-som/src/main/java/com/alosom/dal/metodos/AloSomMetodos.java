@@ -4,35 +4,32 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.sql.DataSource;
-
 import com.alosom.dal.db.ConnectionPool;
 import com.alosom.dal.modelos.CondModel;
 import com.alosom.dal.modelos.SomModel;
 
 public class AloSomMetodos {
-	public static List<SomModel> busca(LocalDate dtFiltro, int idCondominio) throws SQLException {
+	public static List<SomModel> busca(LocalDateTime dtFiltro, int idCondominio) throws SQLException {
 		String sql = "select \"DATA_DISP\", \"INTENSIDADE\", \"AREA\", \"ANDAR\", \"UNIDADE\", \"DATA_SERV\" "
 				+ "from public.tb_monit_sensores a "
 				+ "join public.tb_sensores b "
 			    + "on a.\"ID_SENSOR\" = b.\"ID_SENSOR\"::text "
-				+ "where DATE_TRUNC('hour',\"DATA_DISP\") = ? "
+				+ "where DATE_TRUNC('hour',\"DATA_DISP\") = DATE_TRUNC('hour',to_timestamp( ? , 'YYYY-MM-DD HH24:MI:SS') ) "
 				+ "and b.\"ID_CONDOMINIO\" = ? "
 				+ "order by \"DATA_DISP\", \"INTENSIDADE\";";
 		List<SomModel> itens = new ArrayList<SomModel>();
-		java.sql.Date sqlDtFiltro = java.sql.Date.valueOf(dtFiltro);
 		
 		try {
 			DataSource ds = ConnectionPool.getConnection();
 			Connection cn = ds.getConnection();
 			PreparedStatement ps = cn.prepareStatement(sql);
-			ps.setDate(1, sqlDtFiltro);
+			ps.setTimestamp(1, Timestamp.valueOf(dtFiltro));
 			ps.setInt(2, idCondominio);
 			ResultSet rs = ps.executeQuery();
 			
@@ -45,6 +42,10 @@ public class AloSomMetodos {
 				int andar = rs.getInt("andar");
 				String unidade = rs.getString("unidade");
 				itens.add(new SomModel(dtRegistro, dtServidor, intensidade, area, andar, unidade));
+			}
+			
+			if (itens.size() == 0) {
+				System.out.println(ps.toString());
 			}
 			cn.close();
 		} catch (SQLException e) {
