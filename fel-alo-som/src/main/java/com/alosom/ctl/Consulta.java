@@ -44,7 +44,7 @@ public class Consulta extends HttpServlet {
 		
 		LocalDateTime ldt = LocalDateTime.parse(data);
 		data = ldt.getDayOfMonth() + "/" + ldt.getMonthValue() + "/" + ldt.getYear() + " " + ldt.getHour() + ":" + ldt.getMinute();
-		long sec_epoch = ldt.atZone(ZoneId.systemDefault()).toEpochSecond();
+		long sec_epoch = ldt.atZone(ZoneId.of("UTC")).toEpochSecond();
 		String titulo = "Consulta registros de " + data;
 		
 		String json = "";
@@ -63,6 +63,7 @@ public class Consulta extends HttpServlet {
 		params.put(IndexBean.QUERY_JSON_KEY, json);
 		
 		//deve recarregar a página!
+
 		ServletCall.forwardWithParameter(this, request, response, "/index.jsp", params);
 	}
 

@@ -102,7 +102,7 @@ public final class IndexBean {
 	
 	public void mostraRelatorio() {
 		JsonObject jo = new Gson().fromJson(resultado, JsonObject.class);
-		JsonArray json = jo.getAsJsonArray();
+		JsonArray json = jo.getAsJsonArray("registros");
 		GsonBuilder gb = new GsonBuilder();
 		Gson g = gb.create();
 		
