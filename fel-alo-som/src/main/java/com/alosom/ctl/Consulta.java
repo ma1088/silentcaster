@@ -3,6 +3,7 @@ package com.alosom.ctl;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 import javax.servlet.ServletException;
@@ -43,9 +44,9 @@ public class Consulta extends HttpServlet {
 		String condo = request.getParameter("condo");
 		
 		LocalDateTime ldt = LocalDateTime.parse(data);
-		data = ldt.getDayOfMonth() + "/" + ldt.getMonthValue() + "/" + ldt.getYear() + " " + ldt.getHour() + ":" + ldt.getMinute();
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 		long sec_epoch = ldt.atZone(ZoneId.of("UTC")).toEpochSecond();
-		String titulo = "Consulta registros de " + data;
+		String titulo = "Consulta registros de " + ldt.format(dtf);
 		
 		String json = "";
 		

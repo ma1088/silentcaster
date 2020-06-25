@@ -38,6 +38,9 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 			bean.setMensagem(qtitle.toString());
 			bean.setResultado(request.getAttribute(IndexBean.QUERY_JSON_KEY).toString());
 			bean.setSelectedCondo(Integer.parseInt(request.getAttribute(IndexBean.QUERY_CONDO_KEY).toString()));
+			if (bean.getResultado() != null && !bean.getResultado().isEmpty()){
+				bean.mostraRelatorio();
+			}
 		}
 	}
 %>
@@ -112,24 +115,17 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 	</div>
 
   <div class="w3-panel">
-    <div class="w3-row-padding" style="margin:0 -300px">
+    <div class="w3-row-padding" style="margin:0 -150px">
       <div class="w3-third">
-        <h5>Regions</h5>
-        <img src="https://picsum.photos/200/300?grayscale" style="width:100%" alt="uma imagem qualquer">
+      	<img src="https://picsum.photos/200/300?grayscale" style="width:100%" alt="uma imagem qualquer">
       </div>
       <div class="w3-twothird">
         <h5>${bean.mensagem}</h5>
         <table class="w3-table w3-striped w3-white">
-        	<tr>
-        		<td>Data</td>
-        		<td>Intensidade</td>
-        		<td>Area</td>
-        		<td>Andar</td>
-        		<td>Unidades de referência</td>
-        	</tr>
         	<%
         		ArrayList<RelatorioSom> al = bean.getRelatorioSom();
         		if (al != null){
+        			out.println("<tr><td>Data/Hora</td><td>Intensidade</td><td>Area</td><td>Andar</td><td>Unidades de Referência</td></tr>");
         			Iterator<RelatorioSom> it = al.iterator();	
         			while (it.hasNext()){
         				out.println("<tr>");
