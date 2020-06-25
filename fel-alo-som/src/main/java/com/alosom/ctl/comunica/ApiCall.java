@@ -1,4 +1,4 @@
-package com.alosom.ctl;
+package com.alosom.ctl.comunica;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

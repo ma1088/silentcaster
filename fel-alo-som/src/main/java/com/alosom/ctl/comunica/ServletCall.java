@@ -1,4 +1,4 @@
-package com.alosom.ctl;
+package com.alosom.ctl.comunica;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -11,6 +11,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.alosom.ctl.LoginBean;
 
 public final class ServletCall {
 	public static void forwardWithParameter(HttpServlet servlet, HttpServletRequest request, HttpServletResponse response, String url, HashMap<String, String> params) throws ServletException, IOException {

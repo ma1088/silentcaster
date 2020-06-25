@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import javax.faces.bean.ManagedBean;
 
+import com.alosom.ctl.comunica.ApiCall;
 import com.alosom.ctl.model.Condo;
 import com.alosom.ctl.model.RelatorioSom;
 import com.google.appengine.repackaged.com.google.gson.Gson;

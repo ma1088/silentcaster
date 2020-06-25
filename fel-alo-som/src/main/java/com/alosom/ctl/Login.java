@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.alosom.ctl.comunica.ApiCall;
+import com.alosom.ctl.comunica.ServletCall;
 import com.google.appengine.repackaged.com.google.gson.JsonElement;
 import com.google.appengine.repackaged.com.google.gson.JsonObject;
 

@@ -1,4 +1,4 @@
-package com.alosom.ctl;
+package com.alosom.ctl.comunica;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -11,6 +11,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.alosom.ctl.IndexBean;
 
 /**
  * Servlet implementation class Login

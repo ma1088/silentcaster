@@ -56,7 +56,7 @@ public class RelatorioSom {
 	public String getDataLegivel() {
 		Instant instant = Instant.ofEpochMilli(Long.parseLong(data));
 		LocalDateTime ldt = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 		return dtf.format(ldt);
 	}
 

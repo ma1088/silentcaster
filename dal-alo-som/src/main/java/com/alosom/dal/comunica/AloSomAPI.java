@@ -68,7 +68,7 @@ public String buscaCondo(@PathParam("usuario") String usuario) {
 public String consultar(@PathParam("sec") long sec, @PathParam("id") int idCondominio) {
 	try {
 		ArrayList<SomModel> ar = (ArrayList<SomModel>) AloSomMetodos.busca(Instant.ofEpochSecond(sec)
-																				.atZone(ZoneId.of("Z"))
+																				.atZone(ZoneId.of("UTC"))
 																				.toLocalDateTime(), 
 																		idCondominio);
 		JsonObject mainjo = new JsonObject();
