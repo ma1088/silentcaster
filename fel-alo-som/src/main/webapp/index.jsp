@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java"
 		contentType="text/html; charset=UTF-8"
     	pageEncoding="UTF-8"
-    	import="com.alosom.ctl.LoginBean"%>
+    	import="com.alosom.ctl.IndexBean"
+    	import="java.util.ArrayList"
+    	import="com.alosom.ctl.model.*"%>
 <html xmlns="http://www.w3.org/1999/xhtml"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:h="http://java.sun.com/jsf/html"
@@ -10,13 +13,27 @@
 <title>Detector de Ruído Predial</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"></link>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway"></link>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
 html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 </style>
 <body class="w3-light-grey">
+<jsp:useBean id="bean" class="com.alosom.ctl.IndexBean" scope="application">
+<jsp:setProperty name="bean" property="*"/>
+</jsp:useBean>
+
+<!-- init -->
+<%
+	Object s = request.getAttribute(IndexBean.USER_KEY); 
+	if ( s == null){
+		bean.setUsuario("ainda não fomos apresentados");
+	}else {
+		bean.setUsuario(s.toString());
+		bean.buscaCondos();
+	}
+%>
 
 <!-- Top container -->
 <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
@@ -24,14 +41,15 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   <span class="w3-bar-item w3-right">Detector de Ruído Predial	<img alt="ZaZen Logo" src="https://github.com/ma1088/alo_som/blob/master/imagens/Imagem4pq.png?raw=true" style="width:30px"/></span>
 </div>
 
+<form>
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
   <div class="w3-container w3-row">
     <div class="w3-col s4">
-      <img src="/w3images/avatar2.png" class="w3-circle w3-margin-right" style="width:46px">
+      <img src="https://github.com/ma1088/alo_arduino/blob/master/imagens/avatar2.png?raw=true" class="w3-circle w3-margin-right" style="width:46px">
     </div>
     <div class="w3-col s8 w3-bar">
-      <span>Olá, <strong><% request.getAttribute("usuario"); %></strong></span><br>
+      <span>Olá, <strong>${bean.usuario}</strong></span><br>
       <a href="#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a>
       <a href="#" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a>
       <a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
@@ -39,19 +57,18 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   </div>
   <hr>
   <div class="w3-container">
-    <h5>Dashboard</h5>
+    <h5>Seus Condomínios</h5>
   </div>
   <div class="w3-bar-block">
-    <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>� Close Menu</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-users fa-fw"></i> Overview</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i> Views</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i> Traffic</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bullseye fa-fw"></i> Geo</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-diamond fa-fw"></i> Orders</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bell fa-fw"></i> News</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bank fa-fw"></i> General</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-history fa-fw"></i> History</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i> Settings</a><br><br>
+	<select name="condos" id="cdlist" class="w3-bar-item w3-button w3-padding">
+	    <%
+	    	ArrayList<Condo> al = bean.getCondos();
+	    	for (int i = 0; i < al.size(); i++){
+	    		Condo cd = al.get(i);
+	    		out.println("<option value=\"" + cd.getId() + "\"><i class=\"fa fa-building fa-fw\"></i>" + cd.getNome() + " </option>");
+	    	}
+	    %>
+	</select>
   </div>
 </nav>
 
@@ -64,20 +81,9 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
   <!-- Header -->
   <header class="w3-container" style="padding-top:22px">
-    <h5><b><i class="fa fa-dashboard"></i> Consultar Registro</b></h5>
+    <h5><b><i class="fa fa-dashboard"></i> Consultar Registros de Ruído</b></h5>
   </header>
 
-  <div class="w3-row-padding w3-margin-bottom">
-    <div class="w3-quarter">
-      <div class="w3-container w3-red w3-padding-16">
-        <div class="w3-left"><i class="fa fa-comment w3-xxxlarge"></i></div>
-        <div class="w3-right">
-          <h3>52</h3>
-        </div>
-        <div class="w3-clear"></div>
-        <h4>Messages</h4>
-      </div>
-    </div>
     <div class="w3-quarter">
       <div class="w3-container w3-blue w3-padding-16">
         <div class="w3-left"><i class="fa fa-eye w3-xxxlarge"></i></div>
@@ -279,10 +285,12 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   <footer class="w3-container w3-padding-16 w3-light-grey">
     <h4>FOOTER</h4>
     <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+    <p>Template W3 <a href="https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_templates_analytics" target="_blank">Analytics Template</a></p>
   </footer>
 
   <!-- End page content -->
 </div>
+</form>
 
 <script>
 // Get the Sidebar

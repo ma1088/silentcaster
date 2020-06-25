@@ -16,7 +16,7 @@ public final class ApiCall {
 		String url = "https://alosom-service-dot-silentcaster02.rj.r.appspot.com/alosom/login";		
 		String param = "usuario=" + usuario + "&senha=" + senha;
 
-		HttpURLConnection conn = callApi(url, param);
+		HttpURLConnection conn = callApi(url,"POST", param);
 		
 		int resp = conn.getResponseCode();
 		
@@ -39,23 +39,49 @@ public final class ApiCall {
 		return jo;
 	}
 
-	private static HttpURLConnection callApi(String url, String param) throws IOException {
-		URL obj = new URL(url);
-		byte[] postdata = param.getBytes();
+	public static JsonObject buscaCondos(String usuario) throws IOException {
+		String url = "https://alosom-service-dot-silentcaster02.rj.r.appspot.com/alosom/buscacondo/" + usuario;
 		
+		HttpURLConnection conn = callApi(url, "GET", null);
+		int resp = conn.getResponseCode();
+		
+		JsonObject jo;
+		if (resp == HttpURLConnection.HTTP_OK) {
+			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String inputln;
+			StringBuffer strbfr = new StringBuffer();
+			while ((inputln = br.readLine()) != null) {
+				strbfr.append(inputln);
+			}
+			br.close();
+			jo = new Gson().fromJson(strbfr.toString(), JsonObject.class);
+		} else {
+			jo = new JsonObject();
+			jo.addProperty("httperr", resp);
+			jo.addProperty("erro", conn.getResponseMessage());
+		}
+
+		return jo;
+		
+	}
+	
+	private static HttpURLConnection callApi(String url, String method, String param) throws IOException {
+		URL obj = new URL(url);
 		HttpURLConnection conn = (HttpURLConnection) obj.openConnection();
 		
-		conn.setRequestMethod("POST");
-		conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-		conn.setRequestProperty("charset", "utf-8");
-		conn.setRequestProperty("Content-Length", Integer.toString(postdata.length));
-		conn.setUseCaches(false);
-		
-		conn.setDoOutput(true);
-		try(DataOutputStream dt = new DataOutputStream(conn.getOutputStream())){
-			dt.write(postdata);
-			dt.flush();
-			dt.close();
+		conn.setRequestMethod(method);
+		if (param != null) {
+			byte[] postdata = param.getBytes();
+			conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			conn.setRequestProperty("charset", "utf-8");
+			conn.setRequestProperty("Content-Length", Integer.toString(postdata.length));
+			conn.setUseCaches(false);
+			conn.setDoOutput(true);
+			try(DataOutputStream dt = new DataOutputStream(conn.getOutputStream())){
+				dt.write(postdata);
+				dt.flush();
+				dt.close();
+			}
 		}
 		return conn;
 	}

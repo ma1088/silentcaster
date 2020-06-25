@@ -1,22 +1,28 @@
 package com.alosom.ctl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.faces.bean.ManagedBean;
 
-import com.google.appengine.repackaged.com.google.gson.JsonElement;
+import com.alosom.ctl.model.Condo;
+import com.google.appengine.repackaged.com.google.gson.Gson;
+import com.google.appengine.repackaged.com.google.gson.GsonBuilder;
+import com.google.appengine.repackaged.com.google.gson.JsonArray;
 import com.google.appengine.repackaged.com.google.gson.JsonObject;
 
 @ManagedBean
 public final class IndexBean {
 	
-	public static final String USER_KEY = "usuario";
+	public static final String USER_KEY = "nome_usuario";
 
 	private String loginMsg;
 	private String usuario;
 	private String senha;
 	private String mensagem;
+	private ArrayList<Condo> condos;
 
+	private int selectedCondo;
 	
 	public String getUsuario() {
 		return usuario;
@@ -50,21 +56,40 @@ public final class IndexBean {
 		this.loginMsg = loginMsg;
 	}
 	
-	
-	public void apiCall() {
-		JsonObject jo = null;
+	public void buscaCondos() {
 		try {
-			jo = ApiCall.login(usuario, senha);
+			JsonObject jo = ApiCall.buscaCondos(usuario);
+			JsonArray json = jo.getAsJsonArray("registros");
+			
+			condos = new ArrayList<Condo>();
+			GsonBuilder gb = new GsonBuilder();
+			Gson g = gb.create();
+			for (int i = 0; i < json.size(); i++) {
+				Condo cd = g.fromJson(json.get(i), Condo.class);
+				condos.add(cd);
+			}
+			selectedCondo = 0;
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		IndexBean bean = new IndexBean();
-		JsonElement je = jo.get("erro");
-		bean.setLoginMsg(je.getAsString());
-		
+	}
+
+	public int getSelectedCondo() {
+		return selectedCondo;
+	}
+
+	public void setSelectedCondo(int selectedCondo) {
+		this.selectedCondo = selectedCondo;
 	}
 	
+	public int getSelectedCondoId() {
+		return condos.get(selectedCondo).getId();
+	}
+	
+	public ArrayList<Condo> getCondos() {
+		return condos;
+	}
 
 }
