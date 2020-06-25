@@ -15,11 +15,12 @@ import com.google.appengine.repackaged.com.google.gson.JsonObject;
 public final class IndexBean {
 	
 	public static final String USER_KEY = "nome_usuario";
-
-	private String loginMsg;
 	private String usuario;
-	private String senha;
+	public static final String QUERY_TITLE_KEY = "titulo_consulta";
 	private String mensagem;
+	public static final String QUERY_JSON_KEY = "resultado_consulta";
+	private String resultado;
+	
 	private ArrayList<Condo> condos;
 
 	private int selectedCondo;
@@ -31,14 +32,6 @@ public final class IndexBean {
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
 	}
-
-	public String getSenha() {
-		return senha;
-	}
-
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
 	
 	public String getMensagem() {
 		return mensagem;
@@ -46,14 +39,6 @@ public final class IndexBean {
 
 	public void setMensagem(String mensagem) {
 		this.mensagem = mensagem;
-	}
-
-	public String getLoginMsg() {
-		return loginMsg;
-	}
-
-	public void setLoginMsg(String loginMsg) {
-		this.loginMsg = loginMsg;
 	}
 	
 	public void buscaCondos() {
@@ -90,6 +75,14 @@ public final class IndexBean {
 	
 	public ArrayList<Condo> getCondos() {
 		return condos;
+	}
+
+	public String getResultado() {
+		return resultado;
+	}
+
+	public void setResultado(String resultado) {
+		this.resultado = resultado;
 	}
 
 }

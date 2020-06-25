@@ -19,7 +19,7 @@
 </div>
 <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
 	<div class="w3-container w3-row w3-center w3-margin-top">
-		<i class=" fa fa-lightbulb"></i>
+		<i class=" fa fa-lightbulb-o fa-teal w3-xxxlarge" style="width: 150%"></i><br/>
 		<% 
 			out.println(bean.getRandomMsg());
 		%>
