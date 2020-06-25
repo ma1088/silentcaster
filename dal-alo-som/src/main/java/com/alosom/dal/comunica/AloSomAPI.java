@@ -79,7 +79,7 @@ public String consultar(@PathParam("sec") long sec, @PathParam("id") int idCondo
 			jo.addProperty("andar", sm.getAndar());
 			jo.addProperty("unidade", sm.getUnidade());
 			jo.addProperty("intensidade", sm.getIntensidade());
-			jo.addProperty("data", sm.getDtRegistro().toEpochSecond(ZoneOffset.systemDefault().getRules().getOffset(LocalDateTime.now())));
+			jo.addProperty("data", sm.getDtRegistro().atZone(ZoneId.of("UTC")).toEpochSecond());
 			jo.addProperty("erro", "0");
 			ja.add(jo);
 		}
