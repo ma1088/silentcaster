@@ -80,6 +80,7 @@ public String consultar(@PathParam("sec") long sec, @PathParam("id") int idCondo
 			jo.addProperty("unidade", sm.getUnidade());
 			jo.addProperty("intensidade", sm.getIntensidade());
 			jo.addProperty("data", sm.getDtRegistro().toEpochSecond(ZoneOffset.systemDefault().getRules().getOffset(LocalDateTime.now())));
+			jo.addProperty("erro", "0");
 			ja.add(jo);
 		}
 		mainjo.add("registros", ja);
@@ -87,10 +88,8 @@ public String consultar(@PathParam("sec") long sec, @PathParam("id") int idCondo
 	} catch (SQLException e) {
 		Gson gson = new Gson();
 		ArrayList<String> rt = new ArrayList<String>();
-		rt.add("erro");
-		rt.add("sqlstate:" + e.getSQLState());
-		rt.add("sqlcode:" + e.getErrorCode());
-		rt.add("exception:" + e.getMessage());
+		rt.add("erro" + e.getErrorCode());
+		e.printStackTrace();
 		return gson.toJson(rt);
 	}
 }
