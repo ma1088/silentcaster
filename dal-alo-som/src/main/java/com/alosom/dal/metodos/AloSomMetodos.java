@@ -35,9 +35,8 @@ public class AloSomMetodos {
 			
 			while (rs.next()) {
 				int intensidade = rs.getInt("intensidade");
-				ZoneOffset offset = ZoneOffset.systemDefault().getRules().getOffset(LocalDateTime.now());
-				LocalDateTime dtRegistro = LocalDateTime.ofEpochSecond(rs.getDate("data_disp").getTime(), 0, offset);
-				LocalDateTime dtServidor = LocalDateTime.ofEpochSecond(rs.getDate("data_serv").getTime(), 0, offset);
+				LocalDateTime dtRegistro = rs.getTimestamp("data_disp").toLocalDateTime();
+				LocalDateTime dtServidor = rs.getTimestamp("data_serv").toLocalDateTime();
 				String area = rs.getString("area");
 				int andar = rs.getInt("andar");
 				String unidade = rs.getString("unidade");

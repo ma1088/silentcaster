@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.ws.rs.Consumes;
@@ -73,13 +74,14 @@ public String consultar(@PathParam("sec") long sec, @PathParam("id") int idCondo
 																		idCondominio);
 		JsonObject mainjo = new JsonObject();
 		JsonArray ja = new JsonArray();
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 		for (SomModel sm : ar) {
 			JsonObject jo = new JsonObject();
 			jo.addProperty("area", sm.getArea());
 			jo.addProperty("andar", sm.getAndar());
 			jo.addProperty("unidade", sm.getUnidade());
 			jo.addProperty("intensidade", sm.getIntensidade());
-			jo.addProperty("data", sm.getDtRegistro().atZone(ZoneId.of("UTC")).toEpochSecond());
+			jo.addProperty("data", sm.getDtRegistro().format(dtf));
 			jo.addProperty("erro", "0");
 			ja.add(jo);
 		}

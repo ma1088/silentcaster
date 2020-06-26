@@ -3,6 +3,7 @@ package com.alosom.ctl.model;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 public class RelatorioSom {
@@ -54,8 +55,7 @@ public class RelatorioSom {
 	}
 
 	public String getDataLegivel() {
-		Instant instant = Instant.ofEpochSecond(Long.parseLong(data));
-		LocalDateTime ldt = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
+		LocalDateTime ldt = LocalDateTime.ofEpochSecond(Long.parseLong(data), 0, ZoneOffset.UTC);
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 		return dtf.format(ldt);
 	}

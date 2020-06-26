@@ -130,7 +130,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         			while (it.hasNext()){
         				out.println("<tr>");
         				RelatorioSom rs  = it.next();
-        				out.println("<td>" + rs.getDataLegivel() + "</td>");
+        				out.println("<td>" + rs.getData() + "</td>");
         				out.println("<td>" + rs.getIntensidade() + "</td>");
         				out.println("<td>" + rs.getArea() + "</td>");
         				out.println("<td>" + rs.getAndar() + "</td>");
